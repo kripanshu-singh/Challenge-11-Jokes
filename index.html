@@ -1,123 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Random Jokes</title>
     <link rel="icon" type="image/png" href="logo.png" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
     <style>
-      body {
-        background-color: #212121;
-        color: aliceblue;
-        font-family: Arial, Helvetica, sans-serif;
+      h1 {
         text-align: center;
-        height: 100vh;
-        width: 100vw;
-        overflow-y: hidden;
-        overflow-x: hidden;
-      }
-      .main {
-        /* margin-top: 50px; */
-        display: flex;
-        justify-content: center;
-      }
-      .flip-card {
-        background-color: transparent;
-        width: 300px;
-        height: 300px;
-        perspective: 1000px;
-        /* filter: drop-shadow(5px 5px 2px rgb(126, 126, 126)); */
-      }
-      .flip-card-inner {
-        /* position: relative; */
-        width: 100%;
-        height: 100%;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-        /* box-shadow: */
-      }
-
-      .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-      }
-
-      .flip-card-front,
-      .flip-card-back {
-        text-align: center;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        border-radius: 15px;
-        /* display: flex; */
-        /* padding: 20px; */
-      }
-
-      .flip-card-front {
-        background-color: #e6a459;
-        color: black;
-      }
-
-      .flip-card-back {
-        background-color: #2980b9;
-        color: white;
-        transform: rotateY(180deg);
-        justify-content: center;
-        /* align-items: center;  */
-      }
-      .frontText,
-      .backText {
-        padding: 30px;
-      }
-      .refresh {
-        padding: 10px 20px;
-        border-radius: 10px;
-        outline: none;
-        border-style: none;
-        margin-top: 10px;
-        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <h1 style="padding-top: 10px">Jokes</h1>
-    <hr />
-    <h3>Click on the Joke below:</h3>
-    <div class="main">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div class="frontText"></div>
-          </div>
-          <div class="flip-card-back">
-            <div class="backText"></div>
+    <div class="container">
+      <h1 class="pt-2">Jokes</h1>
+      <hr class="pt-4" />
+      <!-- <h5>Click on the Joke below:</h5> -->
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            ></button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse show"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body"></div>
           </div>
         </div>
       </div>
+      <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-outline-success mt-3" id="btn">
+          New Joke
+        </button>
+      </div>
     </div>
-    <button class="refresh">New Jokes</button>
-  </body>
-  <script>
-    let fetchingJoke = () => {
-      let xhr = new XMLHttpRequest();
-      const url = "https://official-joke-api.appspot.com/random_joke";
-      xhr.open("GET", url);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-          let data = JSON.parse(this.responseText);
-          let setup = data.setup;
-          let punchline = data.punchline;
-          displayJoke(setup, punchline);
-        }
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      let fetchingJoke = () => {
+        let xhr = new XMLHttpRequest();
+        const url = "https://official-joke-api.appspot.com/random_joke";
+        xhr.open("GET", url);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            let data = JSON.parse(this.responseText);
+            let setup = data.setup;
+            let punchline = data.punchline;
+            displayJoke(setup, punchline);
+          }
+        };
+        xhr.send();
       };
-      xhr.send();
-    };
-    let displayJoke = (setup, punchline) => {
-      let front = document.querySelector(".frontText");
-      let back = document.querySelector(".backText");
-      front.innerHTML = setup;
-      back.innerHTML = punchline;
-    };
-    fetchingJoke();
-    document.querySelector(".refresh").addEventListener("click", fetchingJoke);
-  </script>
+      let displayJoke = (setup, punchline) => {
+        let front = document.querySelector(".accordion-button");
+        let back = document.querySelector(".accordion-body");
+        front.innerHTML = setup;
+        back.innerHTML = punchline;
+      };
+      fetchingJoke();
+      document.querySelector("#btn").addEventListener("click", fetchingJoke);
+    </script>
+  </body>
 </html>
